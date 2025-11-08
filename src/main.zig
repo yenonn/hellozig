@@ -1,21 +1,6 @@
 const std = @import("std");
 const zap = @import("zap");
-
-fn helloHandler(r: zap.Request) !void {
-    // Set content type to JSON
-    try r.setContentType(.JSON);
-
-    // Send JSON response
-    const json_response =
-        \\{
-        \\  "message": "Hello, World!",
-        \\  "status": "success",
-        \\  "timestamp": 1699430400
-        \\}
-    ;
-
-    try r.sendJson(json_response);
-}
+const hello_handler = @import("hello_handler.zig");
 
 pub fn main() !void {
     // Create a listener for the /hello endpoint
@@ -41,7 +26,7 @@ fn onRequest(r: zap.Request) !void {
     // Check if the path is /hello
     if (r.path) |path| {
         if (std.mem.eql(u8, path, "/hello")) {
-            try helloHandler(r);
+            try hello_handler.helloHandler(r);
             return;
         }
     }
